@@ -1,0 +1,333 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DC344E381762F1BA0090BB07 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC344E371762F1BA0090BB07 /* UIKit.framework */; };
+		DC344E3A1762F1BA0090BB07 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC344E391762F1BA0090BB07 /* Foundation.framework */; };
+		DC344E3C1762F1BA0090BB07 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC344E3B1762F1BA0090BB07 /* CoreGraphics.framework */; };
+		DC344E3E1762F1BA0090BB07 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC344E3D1762F1BA0090BB07 /* CoreData.framework */; };
+		DC344E441762F1BA0090BB07 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC344E421762F1BA0090BB07 /* InfoPlist.strings */; };
+		DC344E461762F1BA0090BB07 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DC344E451762F1BA0090BB07 /* main.m */; };
+		DC344E4A1762F1BA0090BB07 /* LGECAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DC344E491762F1BA0090BB07 /* LGECAppDelegate.m */; };
+		DC344E4C1762F1BA0090BB07 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DC344E4B1762F1BA0090BB07 /* Default.png */; };
+		DC344E4E1762F1BA0090BB07 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DC344E4D1762F1BA0090BB07 /* Default@2x.png */; };
+		DC344E501762F1BA0090BB07 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DC344E4F1762F1BA0090BB07 /* Default-568h@2x.png */; };
+		DC344E531762F1BA0090BB07 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC344E511762F1BA0090BB07 /* MainStoryboard.storyboard */; };
+		DC344E561762F1BA0090BB07 /* Wocation.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DC344E541762F1BA0090BB07 /* Wocation.xcdatamodeld */; };
+		DC344E591762F1BA0090BB07 /* LGECMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC344E581762F1BA0090BB07 /* LGECMasterViewController.m */; };
+		DC344E5C1762F1BA0090BB07 /* LGECDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC344E5B1762F1BA0090BB07 /* LGECDetailViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		DC344E341762F1BA0090BB07 /* Wocation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wocation.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC344E371762F1BA0090BB07 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		DC344E391762F1BA0090BB07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DC344E3B1762F1BA0090BB07 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		DC344E3D1762F1BA0090BB07 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		DC344E411762F1BA0090BB07 /* Wocation-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Wocation-Info.plist"; sourceTree = "<group>"; };
+		DC344E431762F1BA0090BB07 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DC344E451762F1BA0090BB07 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DC344E471762F1BA0090BB07 /* Wocation-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Wocation-Prefix.pch"; sourceTree = "<group>"; };
+		DC344E481762F1BA0090BB07 /* LGECAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LGECAppDelegate.h; sourceTree = "<group>"; };
+		DC344E491762F1BA0090BB07 /* LGECAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LGECAppDelegate.m; sourceTree = "<group>"; };
+		DC344E4B1762F1BA0090BB07 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		DC344E4D1762F1BA0090BB07 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		DC344E4F1762F1BA0090BB07 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		DC344E521762F1BA0090BB07 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		DC344E551762F1BA0090BB07 /* Wocation.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Wocation.xcdatamodel; sourceTree = "<group>"; };
+		DC344E571762F1BA0090BB07 /* LGECMasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LGECMasterViewController.h; sourceTree = "<group>"; };
+		DC344E581762F1BA0090BB07 /* LGECMasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LGECMasterViewController.m; sourceTree = "<group>"; };
+		DC344E5A1762F1BA0090BB07 /* LGECDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LGECDetailViewController.h; sourceTree = "<group>"; };
+		DC344E5B1762F1BA0090BB07 /* LGECDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LGECDetailViewController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DC344E311762F1BA0090BB07 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC344E381762F1BA0090BB07 /* UIKit.framework in Frameworks */,
+				DC344E3A1762F1BA0090BB07 /* Foundation.framework in Frameworks */,
+				DC344E3C1762F1BA0090BB07 /* CoreGraphics.framework in Frameworks */,
+				DC344E3E1762F1BA0090BB07 /* CoreData.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DC344E2B1762F1B90090BB07 = {
+			isa = PBXGroup;
+			children = (
+				DC344E3F1762F1BA0090BB07 /* Wocation */,
+				DC344E361762F1BA0090BB07 /* Frameworks */,
+				DC344E351762F1BA0090BB07 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DC344E351762F1BA0090BB07 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DC344E341762F1BA0090BB07 /* Wocation.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DC344E361762F1BA0090BB07 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DC344E371762F1BA0090BB07 /* UIKit.framework */,
+				DC344E391762F1BA0090BB07 /* Foundation.framework */,
+				DC344E3B1762F1BA0090BB07 /* CoreGraphics.framework */,
+				DC344E3D1762F1BA0090BB07 /* CoreData.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DC344E3F1762F1BA0090BB07 /* Wocation */ = {
+			isa = PBXGroup;
+			children = (
+				DC344E481762F1BA0090BB07 /* LGECAppDelegate.h */,
+				DC344E491762F1BA0090BB07 /* LGECAppDelegate.m */,
+				DC344E511762F1BA0090BB07 /* MainStoryboard.storyboard */,
+				DC344E571762F1BA0090BB07 /* LGECMasterViewController.h */,
+				DC344E581762F1BA0090BB07 /* LGECMasterViewController.m */,
+				DC344E5A1762F1BA0090BB07 /* LGECDetailViewController.h */,
+				DC344E5B1762F1BA0090BB07 /* LGECDetailViewController.m */,
+				DC344E541762F1BA0090BB07 /* Wocation.xcdatamodeld */,
+				DC344E401762F1BA0090BB07 /* Supporting Files */,
+			);
+			path = Wocation;
+			sourceTree = "<group>";
+		};
+		DC344E401762F1BA0090BB07 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DC344E411762F1BA0090BB07 /* Wocation-Info.plist */,
+				DC344E421762F1BA0090BB07 /* InfoPlist.strings */,
+				DC344E451762F1BA0090BB07 /* main.m */,
+				DC344E471762F1BA0090BB07 /* Wocation-Prefix.pch */,
+				DC344E4B1762F1BA0090BB07 /* Default.png */,
+				DC344E4D1762F1BA0090BB07 /* Default@2x.png */,
+				DC344E4F1762F1BA0090BB07 /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DC344E331762F1BA0090BB07 /* Wocation */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DC344E5F1762F1BA0090BB07 /* Build configuration list for PBXNativeTarget "Wocation" */;
+			buildPhases = (
+				DC344E301762F1BA0090BB07 /* Sources */,
+				DC344E311762F1BA0090BB07 /* Frameworks */,
+				DC344E321762F1BA0090BB07 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Wocation;
+			productName = Wocation;
+			productReference = DC344E341762F1BA0090BB07 /* Wocation.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DC344E2C1762F1B90090BB07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = LGEC;
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "CHIH YUAN CHEN";
+			};
+			buildConfigurationList = DC344E2F1762F1B90090BB07 /* Build configuration list for PBXProject "Wocation" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DC344E2B1762F1B90090BB07;
+			productRefGroup = DC344E351762F1BA0090BB07 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DC344E331762F1BA0090BB07 /* Wocation */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DC344E321762F1BA0090BB07 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC344E441762F1BA0090BB07 /* InfoPlist.strings in Resources */,
+				DC344E4C1762F1BA0090BB07 /* Default.png in Resources */,
+				DC344E4E1762F1BA0090BB07 /* Default@2x.png in Resources */,
+				DC344E501762F1BA0090BB07 /* Default-568h@2x.png in Resources */,
+				DC344E531762F1BA0090BB07 /* MainStoryboard.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DC344E301762F1BA0090BB07 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC344E461762F1BA0090BB07 /* main.m in Sources */,
+				DC344E4A1762F1BA0090BB07 /* LGECAppDelegate.m in Sources */,
+				DC344E561762F1BA0090BB07 /* Wocation.xcdatamodeld in Sources */,
+				DC344E591762F1BA0090BB07 /* LGECMasterViewController.m in Sources */,
+				DC344E5C1762F1BA0090BB07 /* LGECDetailViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		DC344E421762F1BA0090BB07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DC344E431762F1BA0090BB07 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		DC344E511762F1BA0090BB07 /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DC344E521762F1BA0090BB07 /* en */,
+			);
+			name = MainStoryboard.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DC344E5D1762F1BA0090BB07 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		DC344E5E1762F1BA0090BB07 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		DC344E601762F1BA0090BB07 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Wocation/Wocation-Prefix.pch";
+				INFOPLIST_FILE = "Wocation/Wocation-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		DC344E611762F1BA0090BB07 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Wocation/Wocation-Prefix.pch";
+				INFOPLIST_FILE = "Wocation/Wocation-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DC344E2F1762F1B90090BB07 /* Build configuration list for PBXProject "Wocation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC344E5D1762F1BA0090BB07 /* Debug */,
+				DC344E5E1762F1BA0090BB07 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DC344E5F1762F1BA0090BB07 /* Build configuration list for PBXNativeTarget "Wocation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC344E601762F1BA0090BB07 /* Debug */,
+				DC344E611762F1BA0090BB07 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		DC344E541762F1BA0090BB07 /* Wocation.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				DC344E551762F1BA0090BB07 /* Wocation.xcdatamodel */,
+			);
+			currentVersion = DC344E551762F1BA0090BB07 /* Wocation.xcdatamodel */;
+			path = Wocation.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = DC344E2C1762F1B90090BB07 /* Project object */;
+}
