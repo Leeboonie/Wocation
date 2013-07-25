@@ -1,0 +1,29 @@
+/* 
+  Localizable.strings
+  Wocation
+
+  Created by CHIH YUAN CHEN on 13/7/24.
+  Copyright (c) 2013年 CHIH YUAN CHEN. All rights reserved.
+*/
+
+//LGECRegisterView
+
+"Email"="郵件地址";
+"Password"="密碼";
+"Login"="登入";
+"Register"="註冊";
+"Id"="帳號";
+"Passward"="密碼";
+"Registration"="註冊新帳號";
+"Nickname"="使用者名稱";
+"Email"="郵件地址";
+"Password"="密碼";
+"Pwd Again"="確認密碼";
+"Register"="註冊";
+"Cancel"="取消";
+
+"Registration"="註冊新帳號";
+"Please choose a user name" = "請輸入使用者名稱";
+"Please input your Email"="請輸入電子郵件地址";
+"Password here"="請輸入密碼";
+"Confirm your password"="請再確認一次";

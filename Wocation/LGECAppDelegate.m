@@ -8,7 +8,8 @@
 
 #import "LGECAppDelegate.h"
 
-#import "LGECMasterViewController.h"
+#import "LGECViewController.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @implementation LGECAppDelegate
 
@@ -19,9 +20,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-    LGECMasterViewController *controller = (LGECMasterViewController *)navigationController.topViewController;
-    controller.managedObjectContext = self.managedObjectContext;
+    //UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+    //LGECViewController *controller = (LGECViewController *)navigationController.topViewController;
+    //controller.managedObjectContext = self.managedObjectContext;
     return YES;
 }
 							
