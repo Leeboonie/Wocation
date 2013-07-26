@@ -8,7 +8,6 @@
 
 #import "LGECLoginViewController.h"
 #import "LGECViewController.h"
-#import "LGECAppDelegate.h"
 
 static NSString * const kUserEntityName = @"User";
 static NSString * const kUsername = @"username";
@@ -27,6 +26,8 @@ static NSString * const kUserPassword = @"password";
 @synthesize managedObjectContext;
 
 - (void)loginServer:(id)sender {
+    [self.spinner setHidden:FALSE];
+    [self.spinner startAnimating];
     LGECAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     NSString *urlStr = [[NSString alloc] initWithFormat:@"http://arnose.net:8000/place/login/login.json?user=%@&password=%@",userID.text,password.text];
     NSURL *url = [NSURL URLWithString:[urlStr stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
@@ -35,44 +36,49 @@ static NSString * const kUserPassword = @"password";
     //2 Prepare NSData for receiving the JSON data
     NSData *authData=[NSData dataWithContentsOfURL:url  options:NSDataReadingMapped error:&error];
     //NSLog(@"%@", jsonData);
-    
-    NSString *stringToLookup = [[NSString alloc]initWithData:authData encoding:NSUTF8StringEncoding];
-    NSLog(@"stringToLookup: %@ ", stringToLookup);
-    
-    //3 Parse the retrieved JSON to an NSArray
-    NSDictionary *Auth_Dictionay = [NSJSONSerialization JSONObjectWithData:authData options:
-                  NSJSONReadingMutableContainers error:&error];
-    if ([[Auth_Dictionay objectForKey:@"message"] isEqual: @"OK"])
-    {
-        NSLog(@"OK");
-        //do any setup you need for myNewVC
+    if (error) {
+        NSLog(@"%@", [error localizedDescription]);
+    } else {
+        NSLog(@"Data has loaded successfully.");
+        NSString *stringToLookup = [[NSString alloc]initWithData:authData encoding:NSUTF8StringEncoding];
+        NSLog(@"stringToLookup: %@ ", stringToLookup);
         
-        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:kUserEntityName];
-        NSArray *objects = [managedObjectContext executeFetchRequest:request error:&error];
-        NSManagedObject *theLine = nil;
-        if ([objects count] > 0) {
+        //3 Parse the retrieved JSON to an NSArray
+        NSDictionary *Auth_Dictionay = [NSJSONSerialization JSONObjectWithData:authData options:
+                                        NSJSONReadingMutableContainers error:&error];
+        if ([[Auth_Dictionay objectForKey:@"message"] isEqual: @"OK"])
+        {
+            NSLog(@"OK");
+            //do any setup you need for myNewVC
+            
+            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:kUserEntityName];
+            NSArray *objects = [managedObjectContext executeFetchRequest:request error:&error];
+            NSManagedObject *theLine = nil;
+            if ([objects count] > 0) {
                 theLine = [objects objectAtIndex:0];
-        } else {
+            } else {
                 theLine = [NSEntityDescription
                            insertNewObjectForEntityForName:kUserEntityName
                            inManagedObjectContext:managedObjectContext];
+            }
+            [theLine setValue:userID.text forKey:kUsername];
+            [theLine setValue:password.text forKey:kUserPassword];
+            [appDelegate saveContext];
+            [self performSegueWithIdentifier:@"NavigationControl" sender:sender];
         }
-    [theLine setValue:userID.text forKey:kUsername];
-    [theLine setValue:password.text forKey:kUserPassword];
-    [appDelegate saveContext];
-    [self performSegueWithIdentifier:@"NavigationControl" sender:sender];
-    }
-    else
-    {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"login error"
-                                                        message:@"PLease check your id and password"
-                                                       delegate:self
-                                              cancelButtonTitle:@"cancel"
-                                              otherButtonTitles:nil];
-        [alert show];
-        NSLog(@"NO");
-    }
+        else
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"login error"
+                                                            message:@"PLease check your id and password"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"cancel"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            NSLog(@"NO");
+        }
 
+    }
+   [self.spinner stopAnimating];
 }
 
 
@@ -102,32 +108,46 @@ static NSString * const kUserPassword = @"password";
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    // See if the app has a valid token for the current state.
     [self.btnLogin setTitle:NSLocalizedString(@"Login", nil) forState:UIControlStateNormal];
     [self.btnRegister setTitle:NSLocalizedString(@"Register", nil) forState:UIControlStateNormal] ;
     self.userID.placeholder = NSLocalizedString(@"Email", nil);
     self.password.placeholder = NSLocalizedString(@"Passward", nil);
-
+        
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    if (self.shouldSkipLogIn) {
-        [self performSelector:@selector(transitionToMainViewController) withObject:nil afterDelay:.5];
+    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
+        // To-do, show logged in view
+        NSLog(@"will login Automatically");
+        [self performFBLogin:(self)];
+        
+    } else {
+        NSLog(@"Show FB Icon");
+        // No, display the login page.
     }
-
 }
 
-- (void)setShouldSkipLogIn:(BOOL)skip {
-    [[NSUserDefaults standardUserDefaults] setBool:skip forKey:@"ScrumptiousSkipLogIn"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+
+- (IBAction)performFBLogin:(id)sender
+{
+    [self.spinner startAnimating];
+    
+    LGECAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate openSession];
+    [self.spinner stopAnimating];
+    
 }
 
-- (BOOL)shouldSkipLogIn {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"ScrumptiousSkipLogIn"];
+-(IBAction)logoutButtonWasPressed:(id)sender {
+    [FBSession.activeSession closeAndClearTokenInformation];
 }
+
 
 -(void) loginWithUserID
 {
+    [self.spinner startAnimating];
     LGECAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     NSManagedObjectContext *context = [appDelegate managedObjectContext];
     managedObjectContext = context;
@@ -166,6 +186,7 @@ static NSString * const kUserPassword = @"password";
             [self performSegueWithIdentifier:@"NavigationControl" sender:self];
         }
     }
+    [self.spinner stopAnimating];
 }
 
 
@@ -213,13 +234,17 @@ static NSString * const kUserPassword = @"password";
     return NO; // We do not want UITextField to insert line-breaks.
 }
 
-
-
+- (void)loginFailed
+{
+    // User switched back to the app without authorizing. Stay here, but
+    // stop the spinner.
+    [self.spinner stopAnimating];
+}
 
 - (void)viewDidUnload {
     [self setBtnLogin:nil];
     [self setBtnRegister:nil];
-    [self setFBLoginView:nil];
+    [self setSpinner:nil];
     [super viewDidUnload];
 }
 @end

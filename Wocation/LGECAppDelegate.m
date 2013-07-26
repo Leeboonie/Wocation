@@ -17,15 +17,28 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
     //UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
     //LGECViewController *controller = (LGECViewController *)navigationController.topViewController;
     //controller.managedObjectContext = self.managedObjectContext;
+    // See if the app has a valid token for the current state.
+    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
+        // To-do, show logged in view
+        NSLog(@"has Token");
+        //[self openSession];
+    } else {
+        // No, display the login page.
+        NSLog(@"Need to login!");
+    }
+    
     return YES;
 }
-							
+
+
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -46,6 +59,10 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    // We need to properly handle activation of the application with regards to Facebook Login
+    // (e.g., returning from iOS 6.0 Login Dialog or from fast app switching).
+    [FBSession.activeSession handleDidBecomeActive];
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -139,6 +156,69 @@
     }    
     
     return _persistentStoreCoordinator;
+}
+
+- (void)sessionStateChanged:(FBSession *)session
+                      state:(FBSessionState) state
+                      error:(NSError *)error
+{
+    switch (state) {
+        case FBSessionStateOpen: {
+            break;
+        case FBSessionStateClosed:
+            
+        case FBSessionStateClosedLoginFailed:
+            // Once the user has logged in, we want them to
+            break;
+        default:
+            break;
+        }
+            
+            if (error) {
+                UIAlertView *alertView = [[UIAlertView alloc]
+                                          initWithTitle:@"Error"
+                                          message:error.localizedDescription
+                                          delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+                [alertView show];
+            }
+    }
+}
+- (void)openSession
+{
+     
+    [FBSession openActiveSessionWithReadPermissions:nil
+                                       allowLoginUI:YES
+                                  completionHandler:
+    
+     ^(FBSession *session,
+       FBSessionState state, NSError *error) {
+                  [self sessionStateChanged:session state:state error:error];
+         if (error) {
+             UIAlertView *alertView = [[UIAlertView alloc]
+                                       initWithTitle:@"Error"
+                                       message:error.localizedDescription
+                                       delegate:nil
+                                       cancelButtonTitle:@"OK"
+                                       otherButtonTitles:nil];
+             [alertView show];
+                      }
+         else
+         {
+             NSLog(@"session opened!");
+                      }
+
+     }];
+
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    return [FBSession.activeSession handleOpenURL:url];
 }
 
 #pragma mark - Application's Documents directory

@@ -692,7 +692,7 @@
         <scene sceneID="hix-77-LXg">
             <objects>
                 <viewController id="MrA-7i-GIV" customClass="LGECLoginViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="K4i-ao-qqZ">
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="K4i-ao-qqZ">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -743,33 +743,82 @@
                                     <segue destination="NJx-RF-b1w" kind="modal" id="FNZ-RY-ErZ"/>
                                 </connections>
                             </button>
-                            <view contentMode="left" id="xo2-Eb-Uxd" customClass="FBLoginView">
-                                <rect key="frame" x="69" y="265" width="183" height="39"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="VbF-2P-nIK">
+                                <rect key="frame" x="119" y="322" width="139" height="53"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                <state key="normal" title="Log in with Facebook">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
                                 <connections>
-                                    <outlet property="delegate" destination="MrA-7i-GIV" id="Oig-ED-a3W"/>
+                                    <action selector="performFBLogin:" destination="MrA-7i-GIV" eventType="touchUpInside" id="QaS-rQ-h94"/>
                                 </connections>
-                            </view>
+                            </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="Nkf-kD-N6b">
+                                <rect key="frame" x="141" y="256" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </activityIndicatorView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_facebook.png" id="aGc-mZ-XBy">
+                                <rect key="frame" x="56" y="319" width="63" height="59"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="0Ob-65-yqa">
+                                <rect key="frame" x="119" y="396" width="139" height="53"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                <state key="normal" title="Log out">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="logoutButtonWasPressed:" destination="MrA-7i-GIV" eventType="touchUpInside" id="FU9-V7-zIB"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="qqH-R9-NKz"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="FBLoginView" destination="xo2-Eb-Uxd" id="AO8-Bw-n85"/>
                         <outlet property="btnLogin" destination="HQp-Y7-AMw" id="O3l-D0-Ro3"/>
                         <outlet property="btnRegister" destination="7il-Ir-Fdf" id="tn0-ud-Fg5"/>
                         <outlet property="password" destination="5Wf-6g-j4i" id="niT-Dq-duq"/>
+                        <outlet property="spinner" destination="Nkf-kD-N6b" id="226-BK-HUM"/>
                         <outlet property="userID" destination="OVK-aT-HhO" id="LPS-43-WH5"/>
+                        <outlet property="view" destination="K4i-ao-qqZ" id="EpL-Cd-hWz"/>
                         <segue destination="M48-H2-AdN" kind="modal" identifier="NavigationControl" modalTransitionStyle="flipHorizontal" id="ptD-Pa-q8G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5nC-QW-ZUE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-530" y="-70"/>
+        </scene>
+        <!--Login View Controller-->
+        <scene sceneID="Adu-TM-bZc">
+            <objects>
+                <viewController id="jBG-j1-AeR" customClass="LGECFBLoginViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EHq-gL-qjz">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eqG-mE-jbM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-35" y="-1467"/>
         </scene>
         <!--Register View Controller-->
         <scene sceneID="oaY-Tg-J9q">
@@ -921,7 +970,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Sgp-qG-ORN">
             <objects>
-                <navigationController storyboardIdentifier="" id="M48-H2-AdN" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NavigationControl" id="M48-H2-AdN" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="XCw-d4-S8O"/>
                     <nil key="simulatedStatusBarMetrics"/>
@@ -975,23 +1024,23 @@
         <image name="86-camera.png" width="24" height="18"/>
         <image name="88-beer-mug.png" width="22" height="27"/>
         <image name="96-book.png" width="18" height="26"/>
+        <image name="icon_facebook.png" width="300" height="300"/>
         <image name="location2.png" width="667" height="333"/>
         <image name="logo2.png" width="114" height="114"/>
     </resources>
     <classes>
-        <class className="FBLoginView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FBLoginView.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
+        <class className="LGECFBLoginViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/LGECFBLoginViewController.h"/>
         </class>
         <class className="LGECLoginViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/LGECLoginViewController.h"/>
             <relationships>
-                <relationship kind="outlet" name="FBLoginView" candidateClass="FBLoginView"/>
+                <relationship kind="action" name="logoutButtonWasPressed:"/>
+                <relationship kind="action" name="performFBLogin:"/>
                 <relationship kind="outlet" name="btnLogin" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="btnRegister" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="password" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="spinner" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="userID" candidateClass="UITextField"/>
             </relationships>
         </class>
@@ -1052,6 +1101,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/LGEClearningWordListViewController.h"/>
             <relationships>
                 <relationship kind="action" name="segmentControlIndexChanged"/>
+                <relationship kind="action" name="updateMap:"/>
                 <relationship kind="outlet" name="segmentControl" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="wordMapview" candidateClass="MKMapView"/>
                 <relationship kind="outlet" name="wordsTableview" candidateClass="UITableView"/>
