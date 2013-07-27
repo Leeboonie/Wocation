@@ -21,4 +21,6 @@
 - (void)loginFailed;
 - (IBAction)performFBLogin:(id)sender;
 -(IBAction)logoutButtonWasPressed:(id)sender;
+- (void)receiptSegue;
+
 @end

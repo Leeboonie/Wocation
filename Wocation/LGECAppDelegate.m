@@ -7,7 +7,7 @@
 //
 
 #import "LGECAppDelegate.h"
-
+#import "LGECLoginViewController.h"
 #import "LGECViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
 
@@ -16,7 +16,7 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
+@synthesize navController=_navController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -158,43 +158,82 @@
     return _persistentStoreCoordinator;
 }
 
+
+
 - (void)sessionStateChanged:(FBSession *)session
                       state:(FBSessionState) state
                       error:(NSError *)error
 {
-    switch (state) {
+    switch (state)
+    {
         case FBSessionStateOpen: {
+                UIViewController *topViewController = [self.navController topViewController];
+                if ([topViewController
+                     isKindOfClass:[LGECLoginViewController class]]) {
+                    [topViewController dismissModalViewControllerAnimated:YES];
+                }
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"segueListener" object:nil];
             break;
         case FBSessionStateClosed:
-            
         case FBSessionStateClosedLoginFailed:
             // Once the user has logged in, we want them to
+            // be looking at the root view.
+            [self.navController popToRootViewControllerAnimated:NO];
+            
+            [FBSession.activeSession closeAndClearTokenInformation];
+            
+            [self showLoginView];
             break;
         default:
             break;
-        }
-            
-            if (error) {
-                UIAlertView *alertView = [[UIAlertView alloc]
-                                          initWithTitle:@"Error"
-                                          message:error.localizedDescription
-                                          delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-                [alertView show];
-            }
+    }
+    
+    if (error) {
+        UIAlertView *alertView = [[UIAlertView alloc]
+                                  initWithTitle:@"Error"
+                                  message:error.localizedDescription
+                                  delegate:nil
+                                  cancelButtonTitle:@"OK"
+                                  otherButtonTitles:nil];
+        [alertView show];
     }
 }
+
+- (void)showLoginView
+{
+    UIViewController *topViewController = [self.navController topViewController];
+    UIViewController *modalViewController = [topViewController modalViewController];
+    
+    // If the login screen is not already displayed, display it. If the login screen is
+    // displayed, then getting back here means the login in progress did not successfully
+    // complete. In that case, notify the login view so it can update its UI appropriately.
+    if (![modalViewController isKindOfClass:[LGECLoginViewController class]]) {
+        LGECLoginViewController* loginViewController = [[LGECLoginViewController alloc]
+                                                      initWithNibName:@"LEGCLoginViewController"
+                                                      bundle:nil];
+        [topViewController presentModalViewController:loginViewController animated:NO];
+    } else {
+        LGECLoginViewController* loginViewController =
+        (LGECLoginViewController*)modalViewController;
+        [loginViewController loginFailed];
+    }
+}
+
+
+
+
+
 - (void)openSession
 {
-     
+    
     [FBSession openActiveSessionWithReadPermissions:nil
                                        allowLoginUI:YES
                                   completionHandler:
-    
+     
      ^(FBSession *session,
        FBSessionState state, NSError *error) {
-                  [self sessionStateChanged:session state:state error:error];
+         [self sessionStateChanged:session state:state error:error];
          if (error) {
              UIAlertView *alertView = [[UIAlertView alloc]
                                        initWithTitle:@"Error"
@@ -203,14 +242,15 @@
                                        cancelButtonTitle:@"OK"
                                        otherButtonTitles:nil];
              [alertView show];
-                      }
+         }
          else
          {
              NSLog(@"session opened!");
-                      }
-
+             
+         }
+         
      }];
-
+    
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -218,6 +258,7 @@
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
 {
+     
     return [FBSession.activeSession handleOpenURL:url];
 }
 

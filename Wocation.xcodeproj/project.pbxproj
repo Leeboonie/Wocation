@@ -242,7 +242,7 @@
 		DCCE677E17A0EA9700E6627E /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = DCCE677D17A0EA9700E6627E /* facebook.png */; };
 		DCCE678017A0F2E700E6627E /* icon_facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = DCCE677F17A0F2E700E6627E /* icon_facebook.png */; };
 		DCCE678217A0F40300E6627E /* facebook_logo_detail.gif in Resources */ = {isa = PBXBuildFile; fileRef = DCCE678117A0F40300E6627E /* facebook_logo_detail.gif */; };
-		DCCE67CB17A21F0C00E6627E /* LGECFBLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCCE67C917A21F0C00E6627E /* LGECFBLoginViewController.m */; };
+		DCCE67D417A42EDA00E6627E /* LGECUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCCE67D317A42EDA00E6627E /* LGECUserProfileViewController.m */; };
 		DCDF9068177339A900256A34 /* LGECNewWordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCDF9067177339A900256A34 /* LGECNewWordViewController.m */; };
 		DCDF906A17733D8A00256A34 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDF906917733D8A00256A34 /* Security.framework */; };
 		DCDF907117733E3900256A34 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDF907017733E3900256A34 /* MediaPlayer.framework */; };
@@ -501,8 +501,8 @@
 		DCCE677D17A0EA9700E6627E /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		DCCE677F17A0F2E700E6627E /* icon_facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_facebook.png; sourceTree = "<group>"; };
 		DCCE678117A0F40300E6627E /* facebook_logo_detail.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = facebook_logo_detail.gif; sourceTree = "<group>"; };
-		DCCE67C817A21F0C00E6627E /* LGECFBLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGECFBLoginViewController.h; sourceTree = "<group>"; };
-		DCCE67C917A21F0C00E6627E /* LGECFBLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGECFBLoginViewController.m; sourceTree = "<group>"; };
+		DCCE67D217A42ED900E6627E /* LGECUserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGECUserProfileViewController.h; sourceTree = "<group>"; };
+		DCCE67D317A42EDA00E6627E /* LGECUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGECUserProfileViewController.m; sourceTree = "<group>"; };
 		DCDF9066177339A900256A34 /* LGECNewWordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGECNewWordViewController.h; sourceTree = "<group>"; };
 		DCDF9067177339A900256A34 /* LGECNewWordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGECNewWordViewController.m; sourceTree = "<group>"; };
 		DCDF906917733D8A00256A34 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -593,6 +593,8 @@
 				DC344E481762F1BA0090BB07 /* LGECAppDelegate.h */,
 				DC344E491762F1BA0090BB07 /* LGECAppDelegate.m */,
 				DCF7B3C617A0333200918BAA /* Login&Register */,
+				DCCE67D217A42ED900E6627E /* LGECUserProfileViewController.h */,
+				DCCE67D317A42EDA00E6627E /* LGECUserProfileViewController.m */,
 				DC299388177AAB1600CD65E6 /* LGECPlaceSavedViewController.h */,
 				DC299389177AAB1600CD65E6 /* LGECPlaceSavedViewController.m */,
 				DC344E621762F39C0090BB07 /* LGECViewController.h */,
@@ -862,8 +864,6 @@
 				DCF7B3C817A0337D00918BAA /* LGECRegisterViewController.m */,
 				DCBAD4E01765046F00287C8B /* LGECLoginViewController.h */,
 				DCBAD4E11765046F00287C8B /* LGECLoginViewController.m */,
-				DCCE67C817A21F0C00E6627E /* LGECFBLoginViewController.h */,
-				DCCE67C917A21F0C00E6627E /* LGECFBLoginViewController.m */,
 			);
 			name = "Login&Register";
 			sourceTree = "<group>";
@@ -1165,7 +1165,7 @@
 				DCDF9068177339A900256A34 /* LGECNewWordViewController.m in Sources */,
 				DC29938A177AAB1600CD65E6 /* LGECPlaceSavedViewController.m in Sources */,
 				DCF7B3C917A0337D00918BAA /* LGECRegisterViewController.m in Sources */,
-				DCCE67CB17A21F0C00E6627E /* LGECFBLoginViewController.m in Sources */,
+				DCCE67D417A42EDA00E6627E /* LGECUserProfileViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

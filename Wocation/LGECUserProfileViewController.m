@@ -1,18 +1,18 @@
 //
-//  LGECFBLoginViewController.m
+//  LGECUserProfileViewController.m
 //  Wocation
 //
-//  Created by CHIH YUAN CHEN on 13/7/26.
+//  Created by CHIH YUAN CHEN on 13/7/28.
 //  Copyright (c) 2013年 CHIH YUAN CHEN. All rights reserved.
 //
 
-#import "LGECFBLoginViewController.h"
+#import "LGECUserProfileViewController.h"
 
-@interface LGECFBLoginViewController ()
+@interface LGECUserProfileViewController ()
 
 @end
 
-@implementation LGECFBLoginViewController
+@implementation LGECUserProfileViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+	// Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning

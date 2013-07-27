@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
-#import "LGECFBLoginViewController.h"
+
 
 @interface LGECAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -17,6 +17,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (strong, nonatomic) UINavigationController* navController;
 - (void)openSession;
 - (void)saveContext;
 

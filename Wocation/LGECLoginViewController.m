@@ -113,16 +113,26 @@ static NSString * const kUserPassword = @"password";
     [self.btnRegister setTitle:NSLocalizedString(@"Register", nil) forState:UIControlStateNormal] ;
     self.userID.placeholder = NSLocalizedString(@"Email", nil);
     self.password.placeholder = NSLocalizedString(@"Passward", nil);
-        
+    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
+        // To-do, show logged in view
+        NSLog(@"will login Automatically");
+        LGECAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+        [appDelegate openSession];
+    } else {
+        NSLog(@"Show FB Icon");
+        // No, display the login page.
+    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiptSegue) name:@"segueListener" object:nil];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
+    if (FBSession.activeSession.isOpen == TRUE) {
         // To-do, show logged in view
         NSLog(@"will login Automatically");
-        [self performFBLogin:(self)];
-        
+        [self performSegueWithIdentifier:@"GoMainPage" sender:self];
+
     } else {
         NSLog(@"Show FB Icon");
         // No, display the login page.
@@ -137,8 +147,27 @@ static NSString * const kUserPassword = @"password";
     LGECAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate openSession];
     [self.spinner stopAnimating];
+
+    //判斷登入狀況來看要不要segue
     
 }
+
+- (void)receiptSegue
+{
+    if (FBSession.activeSession.isOpen == TRUE){
+    [self performSegueWithIdentifier:@"GoMainPage" sender:self];
+    }
+}
+
+- (void)loginFailed
+{
+    // User switched back to the app without authorizing. Stay here, but
+    // stop the spinner.
+    [self.spinner stopAnimating];
+}
+
+
+
 
 -(IBAction)logoutButtonWasPressed:(id)sender {
     [FBSession.activeSession closeAndClearTokenInformation];
@@ -234,12 +263,6 @@ static NSString * const kUserPassword = @"password";
     return NO; // We do not want UITextField to insert line-breaks.
 }
 
-- (void)loginFailed
-{
-    // User switched back to the app without authorizing. Stay here, but
-    // stop the spinner.
-    [self.spinner stopAnimating];
-}
 
 - (void)viewDidUnload {
     [self setBtnLogin:nil];
