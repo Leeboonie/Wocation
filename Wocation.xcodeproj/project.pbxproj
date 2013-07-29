@@ -593,8 +593,6 @@
 				DC344E481762F1BA0090BB07 /* LGECAppDelegate.h */,
 				DC344E491762F1BA0090BB07 /* LGECAppDelegate.m */,
 				DCF7B3C617A0333200918BAA /* Login&Register */,
-				DCCE67D217A42ED900E6627E /* LGECUserProfileViewController.h */,
-				DCCE67D317A42EDA00E6627E /* LGECUserProfileViewController.m */,
 				DC299388177AAB1600CD65E6 /* LGECPlaceSavedViewController.h */,
 				DC299389177AAB1600CD65E6 /* LGECPlaceSavedViewController.m */,
 				DC344E621762F39C0090BB07 /* LGECViewController.h */,
@@ -864,6 +862,8 @@
 				DCF7B3C817A0337D00918BAA /* LGECRegisterViewController.m */,
 				DCBAD4E01765046F00287C8B /* LGECLoginViewController.h */,
 				DCBAD4E11765046F00287C8B /* LGECLoginViewController.m */,
+				DCCE67D217A42ED900E6627E /* LGECUserProfileViewController.h */,
+				DCCE67D317A42EDA00E6627E /* LGECUserProfileViewController.m */,
 			);
 			name = "Login&Register";
 			sourceTree = "<group>";

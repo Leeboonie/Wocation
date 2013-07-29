@@ -110,7 +110,7 @@ static NSString * const kUserPassword = @"password";
     // Do any additional setup after loading the view from its nib.
     // See if the app has a valid token for the current state.
     [self.btnLogin setTitle:NSLocalizedString(@"Login", nil) forState:UIControlStateNormal];
-    [self.btnRegister setTitle:NSLocalizedString(@"Register", nil) forState:UIControlStateNormal] ;
+    [self.btnRegister setTitle:NSLocalizedString(@"Sign Up", nil) forState:UIControlStateNormal] ;
     self.userID.placeholder = NSLocalizedString(@"Email", nil);
     self.password.placeholder = NSLocalizedString(@"Passward", nil);
     if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
@@ -169,9 +169,9 @@ static NSString * const kUserPassword = @"password";
 
 
 
--(IBAction)logoutButtonWasPressed:(id)sender {
-    [FBSession.activeSession closeAndClearTokenInformation];
-}
+//-(IBAction)logoutButtonWasPressed:(id)sender {
+//    [FBSession.activeSession closeAndClearTokenInformation];
+//}
 
 
 -(void) loginWithUserID

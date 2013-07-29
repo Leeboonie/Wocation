@@ -10,6 +10,8 @@
 #import "LGECLoginViewController.h"
 #import "LGECViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
+NSString *const SCSessionStateChangedNotification =
+@"com.facebook.Scrumptious:SCSessionStateChangedNotification";
 
 @implementation LGECAppDelegate
 
@@ -25,6 +27,7 @@
     //LGECViewController *controller = (LGECViewController *)navigationController.topViewController;
     //controller.managedObjectContext = self.managedObjectContext;
     // See if the app has a valid token for the current state.
+    [FBProfilePictureView class];
     if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
         // To-do, show logged in view
         NSLog(@"has Token");
@@ -188,7 +191,9 @@
         default:
             break;
     }
-    
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:SCSessionStateChangedNotification
+     object:session];
     if (error) {
         UIAlertView *alertView = [[UIAlertView alloc]
                                   initWithTitle:@"Error"
