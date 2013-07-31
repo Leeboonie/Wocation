@@ -87,24 +87,24 @@
         NSData *jsonData=[NSData dataWithContentsOfURL:url  options:NSDataReadingMapped error:&error];
         if (!(jsonData == nil))
         {
-        NSString *stringToLookup = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
-        NSLog(@"stringToLookup: %@", stringToLookup);
-        //json_array = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-        json_dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options: NSJSONReadingMutableContainers error:&error];
-        NSMutableArray *annoArray = [[NSMutableArray alloc]init];
-        for (id json in [json_dictionary objectForKey:@"results"])
-        {
-            LGECAnnotation *annoArrayObject = [[LGECAnnotation alloc]init];
-            annoArrayObject.title = [json objectForKey:@"name"];
-            NSLog(@"%@", [json objectForKey:@"name"]);
-            annoArrayObject.subTitle =[json objectForKey:@"open_now"];
-            //
-            annoArrayObject.coordinate = CLLocationCoordinate2DMake([[json objectForKey:@"latitude"] doubleValue], [[json objectForKey:@"longitude"]  doubleValue]);
+            NSString *stringToLookup = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
+            NSLog(@"stringToLookup: %@", stringToLookup);
+            //json_array = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+            json_dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options: NSJSONReadingMutableContainers error:&error];
+            NSMutableArray *annoArray = [[NSMutableArray alloc]init];
+            for (id json in [json_dictionary objectForKey:@"results"])
+            {
+                LGECAnnotation *annoArrayObject = [[LGECAnnotation alloc]init];
+                annoArrayObject.title = [json objectForKey:@"name"];
+                NSLog(@"%@", [json objectForKey:@"name"]);
+                annoArrayObject.subTitle =[json objectForKey:@"open_now"];
+                //
+                annoArrayObject.coordinate = CLLocationCoordinate2DMake([[json objectForKey:@"latitude"] doubleValue], [[json objectForKey:@"longitude"]  doubleValue]);
+                
+                //NSLog(@"%f",[[[[json objectForKey:@"geometry"] objectForKey:@"location" ] objectForKey:@"lng"] doubleValue]);
+                [annoArray addObject:annoArrayObject];
+            }
             
-            //NSLog(@"%f",[[[[json objectForKey:@"geometry"] objectForKey:@"location" ] objectForKey:@"lng"] doubleValue]);
-            [annoArray addObject:annoArrayObject];
-        }
-        
             NSLog(@"%D", [annoArray count]);
             
             NSMutableArray * annotationsToRemove = [_placeMapview.annotations mutableCopy];
@@ -112,12 +112,9 @@
             [_placeMapview removeAnnotations:annotationsToRemove ] ;
             [_placeMapview addAnnotations:annoArray];
             self.locationLabel.text = [NSString stringWithFormat:@"%@, %@",lat,lon];
-
-            [self.placeTableview performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
             
+            [self.placeTableview performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
         }
-
-
     });
 }
 

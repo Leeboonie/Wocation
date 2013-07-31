@@ -5,7 +5,7 @@
 //  Created by CHIH YUAN CHEN on 13/7/28.
 //  Copyright (c) 2013年 CHIH YUAN CHEN. All rights reserved.
 //
-
+#define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) //1
 #import "LGECUserProfileViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -19,8 +19,9 @@
 
 @implementation LGECUserProfileViewController
 @synthesize placePickerController = _placePickerController;
-
-
+@synthesize json_dictionary;
+@synthesize json_array;
+//@synthesize table_array;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -49,7 +50,7 @@
     
     NSString* fontName = @"Avenir-Book";
     NSString* boldItalicFontName = @"Avenir-BlackOblique";
-    NSString* boldFontName = @"Avenir-Black";
+//    NSString* boldFontName = @"Avenir-Black";
     
     
     self.nameLabel.textColor =  mainColor;
@@ -90,14 +91,6 @@
     self.VisitedPlaceLabel.text = @"Visited Places";
     
     
-    self.bioLabel.textColor =  mainColor;
-    self.bioLabel.font =  [UIFont fontWithName:fontName size:14.0f];
-    self.bioLabel.text = @"Founder, CEO of Mavin Records, Entrepreneur mom and action gal";
-    
-    self.friendLabel.textColor =  mainColor;
-    self.friendLabel.font =  [UIFont fontWithName:boldFontName size:18.0f];;
-    self.friendLabel.text = @"Friends";
-    
     //self.profileImageView.image = [UIImage imageNamed:@"profile.jpg"];
     self.FBProfile.contentMode = UIViewContentModeScaleAspectFill;
     self.FBProfile.clipsToBounds = YES;
@@ -105,27 +98,18 @@
     self.FBProfile.layer.cornerRadius = 55.0f;
     self.FBProfile.layer.borderColor = imageBorderColor.CGColor;
     
-    self.bioContainer.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.bioContainer.layer.borderWidth = 4.0f;
-    self.bioContainer.layer.cornerRadius = 5.0f;
-    
-    self.friendContainer.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.friendContainer.layer.borderWidth = 4.0f;
-    self.friendContainer.clipsToBounds = YES;
-    self.friendContainer.layer.cornerRadius = 5.0f;
-    
     
     [self addDividerToView:self.scrollView atLocation:230];
     [self addDividerToView:self.scrollView atLocation:300];
-    [self addDividerToView:self.scrollView atLocation:370];
+    //[self addDividerToView:self.scrollView atLocation:370];
     
-    self.scrollView.contentSize = CGSizeMake(320, 590);
+    self.scrollView.contentSize = CGSizeMake(320, 850);
     self.scrollView.backgroundColor = [UIColor whiteColor];
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(sessionStateChanged:)
-     name:SCSessionStateChangedNotification
+     name:LGECSessionStateChangedNotification
      object:nil];
     
     self.locationManager = [[CLLocationManager alloc] init];
@@ -135,10 +119,15 @@
     // preferring to use our last cached results, if any.
     self.locationManager.distanceFilter = 50;
     [self.locationManager startUpdatingLocation];
-    [self populateUserDetails];
     
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(json_loaded) name:@"jsonListener" object:nil];
+    json_array = [[NSMutableArray alloc]init];
 }
-
+-(void)viewDidAppear:(BOOL)animated{
+    [self populateUserDetails];
+    [self FetchUserFeeds:self];
+}
 //-(void)viewWillAppear:(BOOL)animated{
 //    [super viewWillAppear:animated];
 //    
@@ -214,6 +203,7 @@
 
 - (void)sessionStateChanged:(NSNotification*)notification {
     [self populateUserDetails];
+    //[self FetchUserFeeds:self];
 }
 
 
@@ -242,6 +232,184 @@
 - (void)viewDidUnload {
     [self setFBProfile:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self setFeedView:nil];
     [super viewDidUnload];
 }
+
+//- (IBAction)addNewWord:(id)sender {
+//    NSString *linkURL = @"https://www.logyuan.tw/hippopotamus.html";
+//    NSString *pictureURL = @"http://farm8.staticflickr.com/7030/6672141083_306ab84d88.jpg";
+//    
+//    // Prepare the native share dialog parameters
+//    FBShareDialogParams *shareParams = [[FBShareDialogParams alloc] init];
+//    shareParams.link = [NSURL URLWithString:linkURL];
+//    shareParams.name = @"hippopotamus";
+//    shareParams.caption= @"河馬";
+//    shareParams.picture= [NSURL URLWithString:pictureURL];
+//    shareParams.description =@"一種嘴巴很大的動物";
+//    
+//    if ([FBDialogs canPresentShareDialogWithParams:shareParams]){
+//        
+//        [FBDialogs presentShareDialogWithParams:shareParams
+//                                    clientState:nil
+//                                        handler:^(FBAppCall *call, NSDictionary *results, NSError *error) {
+//                                            if(error) {
+//                                                NSLog(@"Error publishing story.");
+//                                            } else if (results[@"completionGesture"] && [results[@"completionGesture"] isEqualToString:@"cancel"]) {
+//                                                NSLog(@"User canceled story publishing.");
+//                                            } else {
+//                                                NSLog(@"Story published.");
+//                                            }
+//                                        }];
+//        
+//    }else {
+//        
+//        // Prepare the web dialog parameters
+//        NSDictionary *params = @{
+//                                 @"name" : shareParams.name,
+//                                 @"caption" : shareParams.caption,
+//                                 @"description" : shareParams.description,
+//                                 @"picture" : pictureURL,
+//                                 @"link" : linkURL
+//                                 };
+//        
+//        // Invoke the dialog
+//        [FBWebDialogs presentFeedDialogModallyWithSession:nil
+//                                               parameters:params
+//                                                  handler:
+//         ^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+//             if (error) {
+//                 NSLog(@"Error publishing story.");
+//             } else {
+//                 if (result == FBWebDialogResultDialogNotCompleted) {
+//                     NSLog(@"User canceled story publishing.");
+//                 } else {
+//                     NSLog(@"Story published.");
+//                 }
+//             }}];
+//    }
+//}
+
+- (IBAction)FetchUserFeeds:(id)sender {
+    
+    [FBSession.activeSession requestNewReadPermissions:@[@"read_stream"]
+                                     completionHandler:^(FBSession *session,
+                                                         NSError *error) {
+                                         // Handle new permissions callback
+                                     }];
+    NSString *token;
+    
+    LGECAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+    if (FBSession.activeSession.isOpen == TRUE)
+    {
+        
+        token = FBSession.activeSession.accessTokenData.accessToken;
+        NSLog(@"The value access token is: %@", token);
+        
+    } else {
+        [appDelegate openSession];
+         token = FBSession.activeSession.accessTokenData.accessToken;
+        NSLog(@"The value access token is: %@", token);
+        // No, display the login page.
+    }
+    dispatch_sync(kBgQueue, ^{
+        NSString *urlStr = [[NSString alloc] initWithFormat:@"https://graph.facebook.com/me/feed?&access_token=%@",token];
+        NSURL *url = [NSURL URLWithString:urlStr];
+        NSLog(@"url: %@ ", urlStr);
+        NSError *error = nil;
+        NSData *jsonData=[NSData dataWithContentsOfURL:url  options:NSDataReadingMapped error:&error];
+        if (error) {
+            NSLog(@"Error fetching the feeds.");
+        }
+        if (!(jsonData == nil))
+        {
+            //            NSString *stringToLookup = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
+            //NSLog(@"stringToLookup: %@", stringToLookup);
+            json_dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options: NSJSONReadingMutableContainers error:&error];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"jsonListener" object:nil];
+        }
+        
+    });
+    
+    
+
+}
+
+- (void)json_loaded
+{
+    for (id json in [json_dictionary objectForKey:@"data" ])
+    {
+        if ([[[json objectForKey:@"application"] objectForKey:@"name"] isEqual: @"wocation"])
+        {
+            [json_array insertObject:json atIndex:[json_array count]];
+        }
+    }
+//    json_array = [json_dictionary valueForKey:@"data"];
+//    NSLog(@"json_array=%@", json_array);
+//    for (id j_obj in json_array){
+//        if (!([[[j_obj objectForKey:@"application"] objectForKey:@"name"] isEqual: @"wocation"])){
+//            NSLog(@"Find ONE");
+//            [table_array insertObject:j_obj atIndex:[table_array count]];
+//        }
+//        
+//    }
+    
+    
+    [self.feedView reloadData];
+}
+
+
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSLog(@"json_array_count=%U", [json_array count]);
+    //NSLog(@"table_array_count=%U", [table_array count]);
+    return [json_array count];
+    
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    NSString *path = [NSString stringWithFormat:@"%@",[json_array[indexPath.row] objectForKey:@"picture"]];
+    NSURL *url = [NSURL URLWithString:path];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    
+    UIColor* mainColor = [UIColor colorWithRed:28.0/255 green:158.0/255 blue:121.0/255 alpha:1.0f];
+    UIColor* imageBorderColor = [UIColor colorWithRed:28.0/255 green:158.0/255 blue:121.0/255 alpha:0.9f];
+    NSString* fontName = @"Avenir-Book";
+    NSString* boldItalicFontName = @"Avenir-BlackOblique";
+    NSLog(@"%u",indexPath.row);
+    CGRect picSize;
+    picSize.size.height=40;
+    picSize.size.width=40;
+    cell.imageView.clipsToBounds = YES;
+    cell.imageView.bounds=picSize;
+    cell.imageView.layer.borderWidth = 1.0f;
+    cell.imageView.layer.cornerRadius = 5.0f;
+    cell.imageView.layer.borderColor = imageBorderColor.CGColor;
+    cell.imageView.image =[[UIImage alloc] initWithData:data];
+    cell.textLabel.textColor = mainColor;
+    cell.textLabel.font =  [UIFont fontWithName:boldItalicFontName size:18.0f];
+    cell.detailTextLabel.font =  [UIFont fontWithName:fontName size:14.0f];
+    cell.textLabel.text = [json_array[indexPath.row] objectForKey:@"name"];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Learnt at %@", [[json_array[indexPath.row] objectForKey:@"place"] objectForKey:@"name"] ];
+    //[NSString stringWithFormat:@"%@,%@",[[[json_dictionary objectForKey:@"results"] objectAtIndex:indexPath.row] objectForKey:@"latitude"],[[[json_dictionary objectForKey:@"results"] objectAtIndex:indexPath.row] objectForKey:@"longitude"]];
+    
+    
+    return cell;
+}
+
+
+
+
+
+
+-(IBAction)logout:(id)sender {
+    [FBSession.activeSession closeAndClearTokenInformation];
+    [self performSegueWithIdentifier:@"backtoLoginPage" sender:self];
+}
+
+
 @end
+

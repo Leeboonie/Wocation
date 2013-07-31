@@ -11,6 +11,7 @@
 #import "LGECAppDelegate.h"
 #import <CoreLocation/CoreLocation.h>
 
+
 @interface LGECUserProfileViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet FBProfilePictureView *FBProfile;
@@ -18,12 +19,6 @@
 @property (nonatomic, weak) IBOutlet UIImageView* profileBgImageView;
 
 @property (nonatomic, weak) IBOutlet UIView* overlayView;
-
-@property (nonatomic, weak) IBOutlet UIImageView* friendImageView1;
-
-@property (nonatomic, weak) IBOutlet UIImageView* friendImageView2;
-
-@property (nonatomic, weak) IBOutlet UIImageView* friendImageView3;
 
 @property (nonatomic, weak) IBOutlet UILabel* nameLabel;
 
@@ -41,19 +36,23 @@
 
 @property (nonatomic, weak) IBOutlet UILabel* VisitedPlaceCountLabel;
 
-@property (nonatomic, weak) IBOutlet UILabel* bioLabel;
-
-@property (nonatomic, weak) IBOutlet UILabel* friendLabel;
-
-@property (nonatomic, weak) IBOutlet UIView* bioContainer;
-
-@property (nonatomic, weak) IBOutlet UIView* friendContainer;
+@property (strong, nonatomic) IBOutlet UITableView *feedView;
 
 @property (nonatomic, weak) IBOutlet UIScrollView* scrollView;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
+@property (copy, nonatomic) NSMutableDictionary *json_dictionary;
+
+@property (copy, nonatomic) NSMutableArray *json_array;
+
+
 @property (strong, nonatomic) FBPlacePickerViewController *placePickerController;
+
+//- (IBAction)addNewWord:(id)sender;
+- (IBAction)FetchUserFeeds:(id)sender;
+- (void)json_loaded;
+- (IBAction)logout:(id)sender;
 
 
 @end

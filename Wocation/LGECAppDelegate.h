@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
-extern NSString *const SCSessionStateChangedNotification;
+extern NSString *const LGECSessionStateChangedNotification;
 
 @interface LGECAppDelegate : UIResponder <UIApplicationDelegate>
 

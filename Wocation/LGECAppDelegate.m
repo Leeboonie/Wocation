@@ -10,8 +10,8 @@
 #import "LGECLoginViewController.h"
 #import "LGECViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
-NSString *const SCSessionStateChangedNotification =
-@"com.facebook.Scrumptious:SCSessionStateChangedNotification";
+NSString *const LGECSessionStateChangedNotification =
+@"com.facebook.wocation:LGECSessionStateChangedNotification";
 
 @implementation LGECAppDelegate
 
@@ -192,7 +192,7 @@ NSString *const SCSessionStateChangedNotification =
             break;
     }
     [[NSNotificationCenter defaultCenter]
-     postNotificationName:SCSessionStateChangedNotification
+     postNotificationName:LGECSessionStateChangedNotification
      object:session];
     if (error) {
         UIAlertView *alertView = [[UIAlertView alloc]

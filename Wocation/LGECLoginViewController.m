@@ -107,6 +107,7 @@ static NSString * const kUserPassword = @"password";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+     UIColor* mainColor = [UIColor colorWithRed:28.0/255 green:158.0/255 blue:121.0/255 alpha:1.0f];
     // Do any additional setup after loading the view from its nib.
     // See if the app has a valid token for the current state.
     [self.btnLogin setTitle:NSLocalizedString(@"Login", nil) forState:UIControlStateNormal];
@@ -123,7 +124,8 @@ static NSString * const kUserPassword = @"password";
         // No, display the login page.
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiptSegue) name:@"segueListener" object:nil];
-
+    self.btnLogin.backgroundColor = mainColor;
+    self.btnRegister.backgroundColor = mainColor;
 }
 
 - (void)viewDidAppear:(BOOL)animated
