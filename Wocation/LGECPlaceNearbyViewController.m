@@ -97,9 +97,11 @@
                 LGECAnnotation *annoArrayObject = [[LGECAnnotation alloc]init];
                 annoArrayObject.title = [json objectForKey:@"name"];
                 NSLog(@"%@", [json objectForKey:@"name"]);
-                annoArrayObject.subTitle =[json objectForKey:@"open_now"];
+                annoArrayObject.subTitle =[json objectForKey:@"vicinity"];
                 //
-                annoArrayObject.coordinate = CLLocationCoordinate2DMake([[json objectForKey:@"latitude"] doubleValue], [[json objectForKey:@"longitude"]  doubleValue]);
+                annoArrayObject.coordinate = CLLocationCoordinate2DMake([[[[json objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"latitude"] doubleValue], [[[[json objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"longitude"]  doubleValue]);
+//for arnose code
+//                annoArrayObject.coordinate = CLLocationCoordinate2DMake([[json objectForKey:@"latitude"] doubleValue], [[json objectForKey:@"longitude"]  doubleValue]);
                 
                 //NSLog(@"%f",[[[[json objectForKey:@"geometry"] objectForKey:@"location" ] objectForKey:@"lng"] doubleValue]);
                 [annoArray addObject:annoArrayObject];

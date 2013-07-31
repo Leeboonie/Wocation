@@ -122,7 +122,7 @@
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(json_loaded) name:@"jsonListener" object:nil];
-    json_array = [[NSMutableArray alloc]init];
+    
 }
 -(void)viewDidAppear:(BOOL)animated{
     [self populateUserDetails];
@@ -337,6 +337,7 @@
 
 - (void)json_loaded
 {
+    json_array = [[NSMutableArray alloc]init];
     for (id json in [json_dictionary objectForKey:@"data" ])
     {
         if ([[[json objectForKey:@"application"] objectForKey:@"name"] isEqual: @"wocation"])
