@@ -46,13 +46,20 @@
 
 @property (copy, nonatomic) NSMutableArray *json_array;
 
-
 @property (strong, nonatomic) FBPlacePickerViewController *placePickerController;
+
+@property (strong, nonatomic) NSObject<FBGraphPlace>* selectedPlace;
+
+@property (retain, nonatomic) UISearchBar *searchBar;
+
+@property (retain, nonatomic) NSString *searchText;
 
 //- (IBAction)addNewWord:(id)sender;
 - (IBAction)FetchUserFeeds:(id)sender;
 - (void)json_loaded;
 - (IBAction)logout:(id)sender;
+- (IBAction)explore_nearby:(id)sender;
+- (IBAction)just_learned:(id)sender;
 
 
 @end

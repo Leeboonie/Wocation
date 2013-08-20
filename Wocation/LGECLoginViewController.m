@@ -29,7 +29,7 @@ static NSString * const kUserPassword = @"password";
     [self.spinner setHidden:FALSE];
     [self.spinner startAnimating];
     LGECAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    NSString *urlStr = [[NSString alloc] initWithFormat:@"http://arnose.net:8000/place/login/login.json?user=%@&password=%@",userID.text,password.text];
+    NSString *urlStr = [[NSString alloc] initWithFormat:@"http://inbox.arnose.net/login?user=%@&password=%@",userID.text,password.text];
     NSURL *url = [NSURL URLWithString:[urlStr stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
     //NSLog(@"%@", url);
     NSError *error = nil;

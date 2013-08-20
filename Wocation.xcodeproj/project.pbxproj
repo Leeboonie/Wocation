@@ -895,7 +895,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = LGEC;
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "CHIH YUAN CHEN";
 			};
 			buildConfigurationList = DC344E2F1762F1B90090BB07 /* Build configuration list for PBXProject "Wocation" */;
@@ -1227,7 +1227,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos6.1;
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -1251,7 +1251,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				SDKROOT = iphoneos6.1;
+				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 
-@interface LGECUserProfileViewController ()<FBPlacePickerDelegate,CLLocationManagerDelegate>
+@interface LGECUserProfileViewController ()<FBPlacePickerDelegate,CLLocationManagerDelegate,UISearchBarDelegate>
 
 @end
 
@@ -18,10 +18,12 @@
 
 
 @implementation LGECUserProfileViewController
-@synthesize placePickerController = _placePickerController;
+@synthesize placePickerController;
 @synthesize json_dictionary;
 @synthesize json_array;
+@synthesize selectedPlace;
 //@synthesize table_array;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -40,7 +42,8 @@
     // Dispose of any resources that can be recreated.
 }
 
-//**---------------UI design----------------**
+//**---------------view Event----------------**
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -164,15 +167,9 @@
 //    }
 //}
 
--(void)styleFriendProfileImage:(UIImageView*)imageView withImageNamed:(NSString*)imageName andColor:(UIColor*)color{
-    
-    imageView.image = [UIImage imageNamed:imageName];
-    imageView.contentMode = UIViewContentModeScaleAspectFill;
-    imageView.clipsToBounds = YES;
-    imageView.layer.borderWidth = 4.0f;
-    imageView.layer.borderColor = color.CGColor;
-    imageView.layer.cornerRadius = 35.0f;
-}
+
+
+//**---------------Upadte Profile----------------**
 
 -(void)addDividerToView:(UIView*)view atLocation:(CGFloat)location{
     
@@ -181,7 +178,7 @@
     [view addSubview:divider];
 }
 
-//**---------------Upadte Profile----------------**
+
 
 - (void)populateUserDetails
 {
@@ -194,20 +191,165 @@
                  //self.usernameLabel.text = user.name;
                  self.nameLabel.text = user.name;
                  NSLog(@"%@",user.location);
-                 self.usernameLabel.text = [NSString stringWithFormat:@"@%@", user.location[@"name"]];
+                 //self.usernameLabel.text = [NSString stringWithFormat:@"@%@", user.location[@"name"]];
                  self.FBProfile.profileID = user.id;
              }
          }];
     }
 }
 
+-(IBAction)logout:(id)sender {
+    [FBSession.activeSession closeAndClearTokenInformation];
+    [self performSegueWithIdentifier:@"backtoLoginPage" sender:self];
+}
+
+
+
+- (void)viewDidUnload {
+    [self setFBProfile:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self setFeedView:nil];
+    self.placePickerController = nil;
+    self.searchBar = nil;
+    [super viewDidUnload];
+}
+
+
+
+
 - (void)sessionStateChanged:(NSNotification*)notification {
     [self populateUserDetails];
     //[self FetchUserFeeds:self];
 }
 
+- (void)json_loaded
+{
+    json_array = [[NSMutableArray alloc]init];
+    for (id json in [json_dictionary objectForKey:@"data" ])
+    {
+        
+            if ([[[json objectForKey:@"application"] objectForKey:@"name"] isEqual: @"wocation"])
+            {
+                [json_array insertObject:json atIndex:[json_array count]];
+            }
+    }
+    [self.feedView reloadData];
+}
+
+- (IBAction)FetchUserFeeds:(id)sender {
+    
+    [FBSession.activeSession requestNewReadPermissions:@[@"read_stream"]
+                                     completionHandler:^(FBSession *session,
+                                                         NSError *error) {
+                                         // Handle new permissions callback
+                                     }];
+    NSString *token;
+    
+    LGECAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+    if (FBSession.activeSession.isOpen == TRUE)
+    {
+        
+        token = FBSession.activeSession.accessTokenData.accessToken;
+        NSLog(@"The value access token is: %@", token);
+        
+    } else {
+        [appDelegate openSession];
+        token = FBSession.activeSession.accessTokenData.accessToken;
+        NSLog(@"The value access token is: %@", token);
+        // No, display the login page.
+    }
+    dispatch_sync(kBgQueue, ^{
+        NSString *urlStr = [[NSString alloc] initWithFormat:@"https://graph.facebook.com/me/wocation:learn?&access_token=%@&method=GET",token];
+        NSURL *url = [NSURL URLWithString:urlStr];
+        NSLog(@"url: %@ ", urlStr);
+        NSError *error = nil;
+        NSData *jsonData=[NSData dataWithContentsOfURL:url  options:NSDataReadingMapped error:&error];
+        if (error) {
+            NSLog(@"Error fetching the feeds.");
+        }
+        if (!(jsonData == nil))
+        {
+            //            NSString *stringToLookup = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
+            //NSLog(@"stringToLookup: %@", stringToLookup);
+            json_dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options: NSJSONReadingMutableContainers error:&error];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"jsonListener" object:nil];
+        }
+        
+    });
+    
+    
+    
+}
+
+
 
 //**---------------LBS----------------------------**
+
+- (IBAction)explore_nearby:(id)sender {
+    if (!self.placePickerController) {
+        self.placePickerController = [[FBPlacePickerViewController alloc]
+                                      initWithNibName:nil bundle:nil];
+        
+        self.placePickerController.title = @"Select a place";
+    }
+    // Hide the done button
+    placePickerController.doneButton = nil;
+    
+    // Hide the cancel button
+    placePickerController.cancelButton = nil;
+    self.placePickerController.delegate = self;
+    self.placePickerController.locationCoordinate =
+    self.locationManager.location.coordinate;
+    self.placePickerController.radiusInMeters = 1000;
+    self.placePickerController.resultsLimit = 100;
+    self.placePickerController.searchText=@"bank";
+    [self.placePickerController loadData];
+    [self.navigationController pushViewController:self.placePickerController
+                                         animated:true];
+    [self addSearchBarToPlacePickerView];
+}
+
+- (IBAction)just_learned:(id)sender {
+    FBShareDialogParams *params = [[FBShareDialogParams alloc] init];
+    params.link = [NSURL URLWithString:@"https://example.com/book/Snow-Crash.html"];
+    BOOL canShare = [FBDialogs canPresentShareDialogWithParams:params];
+    if (!canShare) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                        message:@"Need Facebook App to launch this function!"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+    else{
+        
+    id<FBOpenGraphAction> action = (id<FBOpenGraphAction>)[FBGraphObject graphObject];
+    [action setObject:@"https://www.logyuan.tw/paddle.html" forKey:@"word"];
+    
+    [FBDialogs presentShareDialogWithOpenGraphAction:action
+                                          actionType:@"wocation:learn"
+                                 previewPropertyName:@"word"
+                                             handler:^(FBAppCall *call, NSDictionary *results, NSError *error) {
+                                                 if(error) {
+                                                     NSLog(@"Error: %@", error.description);
+                                                 } else {
+                                                     NSLog(@"Success!");
+                                                 }
+                                             }];
+    }
+}
+
+- (void)placePickerViewControllerSelectionDidChange:
+(FBPlacePickerViewController *)placePicker
+{
+    self.selectedPlace = placePicker.selection;
+    self.usernameLabel.text =[NSString stringWithFormat:@"@%@", self.selectedPlace.name];
+    if (self.selectedPlace.count > 0) {
+        [self.navigationController popViewControllerAnimated:true];
+    }
+}
+
+
 - (void)locationManager:(CLLocationManager *)manager
     didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation
@@ -227,14 +369,14 @@
        didFailWithError:(NSError *)error {
     NSLog(@"%@", error);
 }
+
+
+
+
+
 //**---------------others----------------------------**
 
-- (void)viewDidUnload {
-    [self setFBProfile:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self setFeedView:nil];
-    [super viewDidUnload];
-}
+
 
 //- (IBAction)addNewWord:(id)sender {
 //    NSString *linkURL = @"https://www.logyuan.tw/hippopotamus.html";
@@ -290,74 +432,70 @@
 //    }
 //}
 
-- (IBAction)FetchUserFeeds:(id)sender {
-    
-    [FBSession.activeSession requestNewReadPermissions:@[@"read_stream"]
-                                     completionHandler:^(FBSession *session,
-                                                         NSError *error) {
-                                         // Handle new permissions callback
-                                     }];
-    NSString *token;
-    
-    LGECAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
-    if (FBSession.activeSession.isOpen == TRUE)
-    {
-        
-        token = FBSession.activeSession.accessTokenData.accessToken;
-        NSLog(@"The value access token is: %@", token);
-        
-    } else {
-        [appDelegate openSession];
-         token = FBSession.activeSession.accessTokenData.accessToken;
-        NSLog(@"The value access token is: %@", token);
-        // No, display the login page.
-    }
-    dispatch_sync(kBgQueue, ^{
-        NSString *urlStr = [[NSString alloc] initWithFormat:@"https://graph.facebook.com/me/feed?&access_token=%@",token];
-        NSURL *url = [NSURL URLWithString:urlStr];
-        NSLog(@"url: %@ ", urlStr);
-        NSError *error = nil;
-        NSData *jsonData=[NSData dataWithContentsOfURL:url  options:NSDataReadingMapped error:&error];
-        if (error) {
-            NSLog(@"Error fetching the feeds.");
-        }
-        if (!(jsonData == nil))
-        {
-            //            NSString *stringToLookup = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
-            //NSLog(@"stringToLookup: %@", stringToLookup);
-            json_dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options: NSJSONReadingMutableContainers error:&error];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"jsonListener" object:nil];
-        }
-        
-    });
-    
-    
 
-}
 
-- (void)json_loaded
+//**---------------UI----------------------------**
+
+
+- (BOOL)placePickerViewController:(FBPlacePickerViewController *)placePicker
+                 shouldIncludePlace:(id<FBGraphPlace>)place
 {
-    json_array = [[NSMutableArray alloc]init];
-    for (id json in [json_dictionary objectForKey:@"data" ])
-    {
-        if ([[[json objectForKey:@"application"] objectForKey:@"name"] isEqual: @"wocation"])
-        {
-            [json_array insertObject:json atIndex:[json_array count]];
+    if (self.searchText && ![self.searchText isEqualToString:@""]) {
+        NSRange result = [place.name
+                          rangeOfString:self.searchText
+                          options:NSCaseInsensitiveSearch];
+        if (result.location != NSNotFound) {
+            return YES;
+        } else {
+            return NO;
         }
+    } else {
+        return YES;
     }
-//    json_array = [json_dictionary valueForKey:@"data"];
-//    NSLog(@"json_array=%@", json_array);
-//    for (id j_obj in json_array){
-//        if (!([[[j_obj objectForKey:@"application"] objectForKey:@"name"] isEqual: @"wocation"])){
-//            NSLog(@"Find ONE");
-//            [table_array insertObject:j_obj atIndex:[table_array count]];
-//        }
-//        
-//    }
-    
-    
-    [self.feedView reloadData];
+    return YES;
 }
+
+
+- (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar
+{
+    [self handleSearch:searchBar];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
+    self.searchText = nil;
+    [searchBar resignFirstResponder];
+}
+
+- (void) handleSearch:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+    self.searchText = searchBar.text;
+    [self.placePickerController updateView];
+}
+
+
+- (void)addSearchBarToPlacePickerView
+{
+    if (self.searchBar == nil) {
+        CGFloat searchBarHeight = 44.0;
+        self.searchBar =
+        [[UISearchBar alloc]
+         initWithFrame:
+         CGRectMake(0,0,
+                    self.view.bounds.size.width,
+                    searchBarHeight)];
+        self.searchBar.autoresizingMask = self.searchBar.autoresizingMask |
+        UIViewAutoresizingFlexibleWidth;
+        self.searchBar.delegate = self;
+        self.searchBar.showsCancelButton = YES;
+        
+        [self.placePickerController.canvasView addSubview:self.searchBar];
+        CGRect newFrame = self.placePickerController.view.bounds;
+        newFrame.size.height -= searchBarHeight;
+        newFrame.origin.y = searchBarHeight;
+        self.placePickerController.tableView.frame = newFrame;
+    }
+}
+
 
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -393,8 +531,8 @@
     cell.textLabel.textColor = mainColor;
     cell.textLabel.font =  [UIFont fontWithName:boldItalicFontName size:18.0f];
     cell.detailTextLabel.font =  [UIFont fontWithName:fontName size:14.0f];
-    cell.textLabel.text = [json_array[indexPath.row] objectForKey:@"name"];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Learnt at %@", [[json_array[indexPath.row] objectForKey:@"place"] objectForKey:@"name"] ];
+    cell.textLabel.text = [NSString stringWithFormat:@"Learnt %@", [[[json_array[indexPath.row] objectForKey:@"data"] objectForKey:@"word"]objectForKey:@"title"] ];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"at %@", [[json_array[indexPath.row] objectForKey:@"place"] objectForKey:@"name"] ];
     //[NSString stringWithFormat:@"%@,%@",[[[json_dictionary objectForKey:@"results"] objectAtIndex:indexPath.row] objectForKey:@"latitude"],[[[json_dictionary objectForKey:@"results"] objectAtIndex:indexPath.row] objectForKey:@"longitude"]];
     
     
@@ -402,15 +540,10 @@
 }
 
 
-
-
-
-
--(IBAction)logout:(id)sender {
-    [FBSession.activeSession closeAndClearTokenInformation];
-    [self performSegueWithIdentifier:@"backtoLoginPage" sender:self];
+-(void)dealloc
+{
+    placePickerController.delegate = nil;
 }
-
 
 @end
 

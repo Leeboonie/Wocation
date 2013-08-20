@@ -42,6 +42,7 @@ static NSString * const kImage = @"image";
 @synthesize placeid;
 @synthesize wPlace;
 @synthesize InputView;
+@synthesize placePickerController;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -67,7 +68,15 @@ static NSString * const kImage = @"image";
         [imageview addGestureRecognizer:singleTap];
         [imageview setUserInteractionEnabled:YES];
     }
-    wPlace.text=placename;
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    // We don't want to be notified of small changes in location,
+    // preferring to use our last cached results, if any.
+    self.locationManager.distanceFilter = 50;
+    [self.locationManager startUpdatingLocation];
+
+    wPlace.titleLabel.text=placename;
     // Do any additional setup after loading the view.
 }
 
@@ -157,6 +166,90 @@ static NSString * const kImage = @"image";
 {
     [self pickMediaFromSource:UIImagePickerControllerSourceTypePhotoLibrary];
 }
+
+- (IBAction)Choose_place:(id)sender {
+    if (!self.placePickerController) {
+        self.placePickerController = [[FBPlacePickerViewController alloc]
+                                      initWithNibName:nil bundle:nil];
+        
+        self.placePickerController.title = @"Select a place";
+    }
+    // Hide the done button
+    placePickerController.doneButton = nil;
+    
+    // Hide the cancel button
+    placePickerController.cancelButton = nil;
+    self.placePickerController.delegate = self;
+    self.placePickerController.locationCoordinate =
+    self.locationManager.location.coordinate;
+    self.placePickerController.radiusInMeters = 1000;
+    self.placePickerController.resultsLimit = 100;
+    self.placePickerController.searchText=nil;
+    [self.placePickerController loadData];
+    [self.navigationController pushViewController:self.placePickerController
+                                         animated:true];
+    [self addSearchBarToPlacePickerView];
+
+    
+}
+
+- (void)addSearchBarToPlacePickerView
+{
+    if (self.searchBar == nil) {
+        CGFloat searchBarHeight = 44.0;
+        self.searchBar =
+        [[UISearchBar alloc]
+         initWithFrame:
+         CGRectMake(0,0,
+                    self.view.bounds.size.width,
+                    searchBarHeight)];
+        self.searchBar.autoresizingMask = self.searchBar.autoresizingMask |
+        UIViewAutoresizingFlexibleWidth;
+        self.searchBar.delegate = self;
+        self.searchBar.showsCancelButton = YES;
+        
+        [self.placePickerController.canvasView addSubview:self.searchBar];
+        CGRect newFrame = self.placePickerController.view.bounds;
+        newFrame.size.height -= searchBarHeight;
+        newFrame.origin.y = searchBarHeight;
+        self.placePickerController.tableView.frame = newFrame;
+    }
+}
+
+- (void)placePickerViewControllerSelectionDidChange:
+(FBPlacePickerViewController *)placePicker
+{
+    self.selectedPlace = placePicker.selection;
+    lat =[NSString stringWithFormat:@"%f", placePicker.locationCoordinate.latitude];
+    lon =[NSString stringWithFormat:@"%f", placePicker.locationCoordinate.longitude];
+    self.wPlace.titleLabel.text =[NSString stringWithFormat:@"@%@", self.selectedPlace.name];
+    if (self.selectedPlace.count > 0) {
+        [self.navigationController popViewControllerAnimated:true];
+    }
+}
+
+
+- (void)locationManager:(CLLocationManager *)manager
+    didUpdateToLocation:(CLLocation *)newLocation
+           fromLocation:(CLLocation *)oldLocation
+{
+    if (!oldLocation ||
+        (oldLocation.coordinate.latitude != newLocation.coordinate.latitude &&
+         oldLocation.coordinate.longitude != newLocation.coordinate.longitude)) {
+            
+            // To-do, add code for triggering view controller update
+            NSLog(@"Got location: %f, %f",
+                  newLocation.coordinate.latitude,
+                  newLocation.coordinate.longitude);
+        }
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+       didFailWithError:(NSError *)error {
+    NSLog(@"%@", error);
+}
+
+
 
 #pragma mark - Image Picker Controller delegate methods
 
@@ -314,14 +407,49 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
 }
 
+- (void)just_learned{
+    FBShareDialogParams *params = [[FBShareDialogParams alloc] init];
+    NSString *urlStr =[NSString stringWithFormat: @"https://www.logyuan.tw/%@.html",InputView.text ];
+    params.link = [NSURL URLWithString:urlStr];
+    BOOL canShare = [FBDialogs canPresentShareDialogWithParams:params];
+    if (!canShare) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                        message:@"Need Facebook App to launch this function!"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+    else{
+        
+        id<FBOpenGraphAction> action = (id<FBOpenGraphAction>)[FBGraphObject graphObject];
+        [action setObject:urlStr forKey:@"word"];
+        id<FBGraphPlace> place = (id<FBGraphPlace>)[FBGraphObject graphObject];
+        [place setId:self.selectedPlace.id];
+        [action setPlace:place];
+        
+        [FBDialogs presentShareDialogWithOpenGraphAction:action
+                                              actionType:@"wocation:learn"
+                                     previewPropertyName:@"word"
+                                                 handler:^(FBAppCall *call, NSDictionary *results, NSError *error) {
+                                                     if(error) {
+                                                         NSLog(@"Error: %@", error.description);
+                                                     } else {
+                                                         NSLog(@"Success!");
+                                                     }
+                                                 }];
+    }
+}
 
 
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self savePlace:placename];
-    [self saveWord:InputView.text];
-    self.navigationController.title = @"Saved";
+    
+    //[self savePlace:placename];
+    //[self saveWord:InputView.text];
+    //self.navigationController.title = @"Saved";
     [textField resignFirstResponder];
+    [self just_learned];
     return NO;
 }
 
@@ -343,6 +471,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     [self setSegmentControl:nil];
     [self setArrayImage:nil];
     [self setWPlace:nil];
+    [self setWPlace:nil];
+    [self setPlacePickerController : nil];
+    [self setSearchBar : nil];
     [super viewDidUnload];
 }
 @end
